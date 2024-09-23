@@ -77,6 +77,14 @@
 
         // Expose the updateModel function to the global scope
         window.updateModel = updateModel;
+
+        // Listen for messages from Wix
+        window.addEventListener("message", (event) => {
+            const { height, width, skinColor } = event.data;
+            updateModel(height, width, skinColor);
+        });
     </script>
 </body>
 </html>
+
+
