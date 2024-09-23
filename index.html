@@ -7,12 +7,25 @@
     <style>
         body { margin: 0; }
         canvas { display: block; }
+        #controls { position: absolute; top: 10px; left: 10px; background: rgba(255, 255, 255, 0.7); padding: 10px; border-radius: 5px; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
+    <div id="controls">
+        <label for="heightInput">Height:</label>
+        <input type="number" id="heightInput" placeholder="Height (m)" step="0.1"><br>
+        
+        <label for="widthInput">Width:</label>
+        <input type="number" id="widthInput" placeholder="Width (m)" step="0.1"><br>
+        
+        <label for="skinColorInput">Skin Color:</label>
+        <input type="text" id="skinColorInput" placeholder="Hex Color Code" value="#ffffff"><br>
+        
+        <button id="updateButton">Update Model</button>
+    </div>
     <script>
         let scene, camera, renderer, model;
 
@@ -25,16 +38,16 @@
             document.body.appendChild(renderer.domElement);
 
             // Add ambient light
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Dimmer ambient light
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
             scene.add(ambientLight);
 
             // Add directional light
             const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-            directionalLight.position.set(5, 10, 7.5); // Adjust position as needed
+            directionalLight.position.set(5, 10, 7.5);
             scene.add(directionalLight);
 
             // Load the 3D model
-            const modelUrl = 'https://raw.githubusercontent.com/BlazedM1234/Online-Fitting-Room-13.0/main/men%20model%204%20blend%20copy.glb'; // Ensure this is correct
+            const modelUrl = 'https://raw.githubusercontent.com/BlazedM1234/Online-Fitting-Room-13.0/main/men%20model%204%20blend%20copy.glb';
             const loader = new THREE.GLTFLoader();
             loader.load(modelUrl, function (gltf) {
                 model = gltf.scene;
@@ -68,8 +81,30 @@
             renderer.render(scene, camera);
         }
 
+        function updateModel(height, width, skinColor) {
+            if (model) {
+                // Update model scale
+                model.scale.set(width, height, width);
+
+                // Change skin color
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        child.material.color.set(skinColor);
+                    }
+                });
+            }
+            render(); // Re-render the scene to apply changes
+        }
+
+        document.getElementById('updateButton').addEventListener('click', function () {
+            const height = parseFloat(document.getElementById('heightInput').value) || 1; // Default to 1
+            const width = parseFloat(document.getElementById('widthInput').value) || 1;   // Default to 1
+            const skinColor = document.getElementById('skinColorInput').value || '#ffffff'; // Default to white
+            
+            updateModel(height, width, skinColor);  // Update the model with new parameters
+        });
+
         init();
     </script>
 </body>
 </html>
-
