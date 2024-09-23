@@ -8,9 +8,9 @@
         body { margin: 0; }
         canvas { display: block; }
     </style>
-    <script src="https://threejs.org/build/three.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
     <script>
@@ -23,12 +23,11 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
-            // Add light
             const light = new THREE.AmbientLight(0xffffff, 1);
             scene.add(light);
 
             // Load the 3D model from GitHub raw URL
-            const modelUrl = 'https://raw.githubusercontent.com/BlazedM1234/Online-Fitting-Room-13.0/main/men%20model%204%20blend%20copy.glb'; // Corrected URL
+            const modelUrl = 'https://raw.githubusercontent.com/BlazedM1234/Online-Fitting-Room-13.0/main/men%20model%204%20blend%20copy.glb';
 
             const loader = new THREE.GLTFLoader();
             loader.load(modelUrl, function (gltf) {
@@ -36,13 +35,11 @@
                 scene.add(model);
                 render();
             }, undefined, function (error) {
-                console.error(error);
+                console.error('Error loading model:', error);
             });
 
-            // Camera position
             camera.position.z = 5;
 
-            // Orbit controls
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
