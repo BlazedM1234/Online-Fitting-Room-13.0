@@ -26,9 +26,8 @@
             const light = new THREE.AmbientLight(0xffffff, 1);
             scene.add(light);
 
-            // Use CORS proxy for the model URL
-            const modelUrl = 'https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/BlazedM1234/Online-Fitting-Room-13.0/main/men%20model%204%20blend%20copy.glb';
-
+            // Update this URL
+            const modelUrl = 'https://your-username.github.io/Online-Fitting-Room-13.0/men%20model%204%20blend%20copy.glb';
             const loader = new THREE.GLTFLoader();
             loader.load(modelUrl, function (gltf) {
                 model = gltf.scene;
