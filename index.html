@@ -8,8 +8,11 @@
         body { margin: 0; }
         canvas { display: block; }
     </style>
+    <!-- Include Three.js core library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Include GLTFLoader -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/loaders/GLTFLoader.js"></script>
+    <!-- Include OrbitControls -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
@@ -17,17 +20,19 @@
         let scene, camera, renderer, model;
 
         function init() {
+            // Initialize the scene
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
+            // Add ambient light
             const light = new THREE.AmbientLight(0xffffff, 1);
             scene.add(light);
 
-            // Update this URL
-            const modelUrl = 'https://your-username.github.io/Online-Fitting-Room-13.0/men%20model%204%20blend%20copy.glb';
+            // Load the 3D model
+            const modelUrl = 'https://BlazedM1234.github.io/Online-Fitting-Room-13.0/men%20model%204%20blend%20copy.glb'; // Update with your raw URL
             const loader = new THREE.GLTFLoader();
             loader.load(modelUrl, function (gltf) {
                 model = gltf.scene;
@@ -37,12 +42,15 @@
                 console.error('Error loading model:', error);
             });
 
+            // Set camera position
             camera.position.z = 5;
 
+            // Orbit controls
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
 
+            // Handle window resizing
             window.addEventListener('resize', onWindowResize, false);
         }
 
