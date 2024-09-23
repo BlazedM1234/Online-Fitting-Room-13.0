@@ -8,13 +8,12 @@
         body { margin: 0; }
         canvas { display: block; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
-    <script type="module">
-        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.131.3/build/three.module.js';
-        import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.131.3/examples/jsm/loaders/GLTFLoader.js';
-        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.131.3/examples/jsm/controls/OrbitControls.js';
-
+    <script>
         let scene, camera, renderer, model;
 
         function init() {
@@ -30,8 +29,8 @@
             scene.add(light);
 
             // Load the 3D model
-            const modelUrl = 'https://raw.githubusercontent.com/BlazedM1234/Online-Fitting-Room-13.0/main/men%20model%204%20blend%20copy.glb'; // Update with your raw URL
-            const loader = new GLTFLoader();
+            const modelUrl = 'https://raw.githubusercontent.com/BlazedM1234/Online-Fitting-Room-13.0/main/men%20model%204%20blend%20copy.glb'; // Ensure this is correct
+            const loader = new THREE.GLTFLoader();
             loader.load(modelUrl, function (gltf) {
                 model = gltf.scene;
                 scene.add(model);
@@ -44,7 +43,7 @@
             camera.position.z = 5;
 
             // Orbit controls
-            const controls = new OrbitControls(camera, renderer.domElement);
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
 
