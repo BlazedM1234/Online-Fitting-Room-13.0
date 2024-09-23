@@ -26,8 +26,8 @@
             const light = new THREE.AmbientLight(0xffffff, 1);
             scene.add(light);
 
-            // Load the 3D model from GitHub raw URL
-            const modelUrl = 'https://raw.githubusercontent.com/BlazedM1234/Online-Fitting-Room-13.0/main/men%20model%204%20blend%20copy.glb';
+            // Use CORS proxy for the model URL
+            const modelUrl = 'https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/BlazedM1234/Online-Fitting-Room-13.0/main/men%20model%204%20blend%20copy.glb';
 
             const loader = new THREE.GLTFLoader();
             loader.load(modelUrl, function (gltf) {
