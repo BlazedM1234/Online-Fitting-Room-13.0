@@ -17,7 +17,7 @@
     <div class="controls">
         <label>Height (cm): <input type="number" id="height" value="170" min="50" max="500" step="1"></label><br>
         <label>Width (cm): <input type="number" id="width" value="50" min="20" max="300" step="1"></label><br>
-        <label>Length (cm): <input type="number" id="length" value="50" min="20" max="300" step="1"></label><br>
+        <label>Length (cm): <input type="number" id="length" value="50" min="20" max="300" step="1"></label><br> <!-- Length added -->
         <label>Skin Color: <input type="color" id="skinColor" value="#ffffff"></label><br>
     </div>
     
@@ -72,7 +72,7 @@
             }
         });
 
-        // Input listeners for length
+        // Input listeners for length (Z-axis)
         document.getElementById('length').addEventListener('input', function() {
             const length = parseFloat(this.value) / 100 || 1;  // Convert cm to meters
             if (model) {
