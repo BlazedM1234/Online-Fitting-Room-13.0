@@ -17,6 +17,7 @@
     <div class="controls">
         <label>Height (cm): <input type="number" id="height" value="170" min="50" max="500" step="1"></label><br>
         <label>Width (cm): <input type="number" id="width" value="50" min="20" max="300" step="1"></label><br>
+        <label>Length (cm): <input type="number" id="length" value="50" min="20" max="300" step="1"></label><br>
         <label>Skin Color: <input type="color" id="skinColor" value="#ffffff"></label><br>
     </div>
     
@@ -53,7 +54,7 @@
         controls.enableDamping = true;
         controls.dampingFactor = 0.25;
 
-        // Input listeners
+        // Input listeners for height
         document.getElementById('height').addEventListener('input', function() {
             const height = parseFloat(this.value) / 100 || 1;  // Convert cm to meters
             if (model) {
@@ -62,6 +63,7 @@
             }
         });
 
+        // Input listeners for width
         document.getElementById('width').addEventListener('input', function() {
             const width = parseFloat(this.value) / 100 || 1;  // Convert cm to meters
             if (model) {
@@ -70,6 +72,16 @@
             }
         });
 
+        // Input listeners for length
+        document.getElementById('length').addEventListener('input', function() {
+            const length = parseFloat(this.value) / 100 || 1;  // Convert cm to meters
+            if (model) {
+                console.log(`Changing length to: ${length}`);
+                model.scale.set(model.scale.x, model.scale.y, length);  // Scale length (Z-axis)
+            }
+        });
+
+        // Input listeners for skin color
         document.getElementById('skinColor').addEventListener('input', function() {
             const color = this.value;
             if (model) {
