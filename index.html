@@ -15,8 +15,8 @@
 </head>
 <body>
     <div class="controls">
-        <label>Height (cm): <input type="number" id="height" value="180" min="50" max="250" step="1"></label><br>
-        <label>Width (cm): <input type="number" id="width" value="50" min="20" max="100" step="1"></label><br>
+        <label>Height (cm): <input type="number" id="height" value="170" min="50" max="500" step="1"></label><br>
+        <label>Width (cm): <input type="number" id="width" value="50" min="20" max="300" step="1"></label><br>
         <label>Skin Color: <input type="color" id="skinColor" value="#ffffff"></label><br>
     </div>
     
@@ -55,20 +55,18 @@
 
         // Input listeners
         document.getElementById('height').addEventListener('input', function() {
-            const height = parseFloat(this.value) || 180; // Default to 180 cm if empty
-            const heightInMeters = height / 100; // Convert cm to meters
+            const height = parseFloat(this.value) / 100 || 1;  // Convert cm to meters
             if (model) {
-                console.log(`Changing height to: ${height} cm (${heightInMeters} meters)`);
-                model.scale.set(model.scale.x, heightInMeters, model.scale.z);  // Scale height (Y-axis)
+                console.log(`Changing height to: ${height}`);
+                model.scale.set(model.scale.x, height, model.scale.z);  // Scale height (Y-axis)
             }
         });
 
         document.getElementById('width').addEventListener('input', function() {
-            const width = parseFloat(this.value) || 50; // Default to 50 cm if empty
-            const widthInMeters = width / 100; // Convert cm to meters
+            const width = parseFloat(this.value) / 100 || 1;  // Convert cm to meters
             if (model) {
-                console.log(`Changing width to: ${width} cm (${widthInMeters} meters)`);
-                model.scale.set(widthInMeters, model.scale.y, model.scale.z);  // Scale width (X-axis)
+                console.log(`Changing width to: ${width}`);
+                model.scale.set(width, model.scale.y, model.scale.z);  // Scale width (X-axis)
             }
         });
 
