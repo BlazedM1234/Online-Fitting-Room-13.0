@@ -7,84 +7,87 @@
     <style>
         body { margin: 0; }
         canvas { display: block; }
+        .controls { position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.8); padding: 10px; border-radius: 5px; }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
+    <div class="controls">
+        <label>Height: <input type="number" id="height" value="1" min="0.5" step="0.1"></label><br>
+        <label>Width: <input type="number" id="width" value="1" min="0.5" step="0.1"></label><br>
+        <label>Skin Color: <input type="color" id="skinColor" value="#ffffff"></label><br>
+    </div>
+    
     <script>
-        let scene, camera, renderer, model;
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-        function init() {
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.appendChild(renderer.domElement);
+        // Add lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(1, 1, 1).normalize();
+        scene.add(directionalLight);
 
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-            scene.add(ambientLight);
+        // Load GLB model from the provided URL
+        const loader = new THREE.GLTFLoader();
+        let model;
 
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-            directionalLight.position.set(5, 10, 7.5);
-            scene.add(directionalLight);
-
-            const modelUrl = 'https://raw.githubusercontent.com/BlazedM1234/Online-Fitting-Room-13.0/main/men%20model%204%20blend%20copy.glb';
-            const loader = new THREE.GLTFLoader();
-            loader.load(modelUrl, function (gltf) {
-                model = gltf.scene;
-                scene.add(model);
-                render();
-            }, undefined, function (error) {
-                console.error('Error loading model:', error);
-            });
-
+        loader.load('https://raw.githubusercontent.com/BlazedM1234/Online-Fitting-Room-13.0/main/men%20model%204%20blend%20copy.glb', function(gltf) {
+            model = gltf.scene;
+            scene.add(model);
             camera.position.z = 5;
+            console.log('Model loaded successfully');
+            animate();  // Start the animation loop after model is loaded
+        }, undefined, function(error) {
+            console.error('An error occurred while loading the model:', error);
+        });
 
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.25;
+        // Add OrbitControls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.25;
 
-            window.addEventListener('resize', onWindowResize, false);
-        }
-
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        function updateModel(height, width, skinColor) {
+        // Input listeners
+        document.getElementById('height').addEventListener('input', function() {
+            const height = parseFloat(this.value) || 1;
             if (model) {
-                model.scale.set(width, height, width);
-                model.traverse((child) => {
-                    if (child.isMesh) {
-                        child.material.color.set(skinColor);
+                console.log(`Changing height to: ${height}`);
+                model.scale.set(model.scale.x, height, model.scale.z);  // Scale height (Y-axis)
+            }
+        });
+
+        document.getElementById('width').addEventListener('input', function() {
+            const width = parseFloat(this.value) || 1;
+            if (model) {
+                console.log(`Changing width to: ${width}`);
+                model.scale.set(width, model.scale.y, model.scale.z);  // Scale width (X-axis)
+            }
+        });
+
+        document.getElementById('skinColor').addEventListener('input', function() {
+            const color = this.value;
+            if (model) {
+                console.log(`Changing skin color to: ${color}`);
+                model.traverse(function(child) {
+                    if (child.isMesh && child.material) {
+                        child.material.color.set(color);  // Update color on all meshes
                     }
                 });
             }
-            render();
-        }
+        });
 
-        function render() {
-            requestAnimationFrame(render);
-            if (model) model.rotation.y += 0.01;
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
             renderer.render(scene, camera);
         }
-
-        init();
-
-        // Expose the updateModel function to the global scope
-        window.updateModel = updateModel;
-
-        // Listen for messages from Wix
-        window.addEventListener("message", (event) => {
-            const { height, width, skinColor } = event.data;
-            updateModel(height, width, skinColor);
-        });
     </script>
 </body>
 </html>
-
-
